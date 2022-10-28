@@ -1,0 +1,4 @@
+Bounded Generics
+Remember that type parameters can be bounded. Bounded means “restricted,” and we can restrict the types that a method accepts.
+
+to continue -->

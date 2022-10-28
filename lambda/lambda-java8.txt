@@ -1,0 +1,1 @@
+ Lambda support in Java 8, specifically how to leverage it to write the Comparator and sort a Collection.

@@ -1,0 +1,57 @@
+
+
+
+We use AssertJ (which provides assertThat() and other methods) to express the test assertions.
+
+
+(+)start the application and listen for a connection (as it would do in production) and then send an HTTP request and assert the response.
+
+webEnvironment=RANDOM_PORT to start the server with a random port (useful to avoid conflicts in test environments)
+
+import org.junit.jupiter.api.Test;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+public class HttpRequestTest {
+
+	@LocalServerPort
+	private int port;
+
+
+(+)not start the server at all but to test only the layer below that, where Spring handles the incoming HTTP request and hands it off to your controller
+you can even ask for only one to be instantiated by using, for example, @WebMvcTest(HomeController.class).
+
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class TestingWebApplicationTest {
+
+	@Autowired
+	private MockMvc mockMvc;
+
+	@Test
+	public void shouldReturnDefaultMessage() throws Exception {
+		this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("Hello, World")));
+	}
+
+
+
+(+)mocks 
+We use @MockBean to create and inject a mock for the GreetingService (if you do not do so, the application context cannot start), and we set its expectations using Mockito.    

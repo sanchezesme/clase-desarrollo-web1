@@ -1,0 +1,61 @@
+Generalized-Target-Type-Inference 
+in Java
+
+increased type safety, avoiding type casting errors and generic algorithms
+
+https://www.baeldung.com/java-generics
+
+List<String> strListInferred = Collections.emptyList();
+List<Integer> intListInferred = Collections.emptyList();
+
+Now, we can call generic methods as an ordinary method if the type parameter can be inferred.
+
+diamond operator <>
+we can perform this operation for generic class constructors in an assignment context
+Map<String, Map<String, String>> mapOfMapsInferred = new HashMap<>();
+
+4. Generalized Target-Type Inference – Java 8
+https://docs.oracle.com/javase/specs/jls/se8/html/jls-18.html
+
+Lambda Expressions do not have an explicit type.  Their type is inferred by looking at the target type of the context or situation
+
+Java 8 supports inference using Target-Type in a method context. When we invoke a generic method without explicit type arguments,
+ the compiler can look at the method invocation and corresponding method declarations to determine the type argument (or arguments) 
+ that make the invocation applicable.
+
+ static <T> List<T> add(List<T> list, T a, T b) {
+    list.add(a);
+    list.add(b);
+    return list;
+}
+
+List<String> strListGeneralized = add(new ArrayList<>(), "abc", "def");
+List<Integer> intListGeneralized = add(new ArrayList<>(), 1, 2);
+List<Number> numListGeneralized = add(new ArrayList<>(), 1, 2.0);
+
+Then, the compiler performs invocation type inference analysis to determine the type arguments. The expected target types are also used in this analysis
+List<Integer> intList = Arrays.asList(5, 2, 4, 2, 1);
+Collections.sort(intList, (a, b) -> a.compareTo(b));
+
+List<String> strList = Arrays.asList("Red", "Blue", "Green");
+Collections.sort(strList, (a, b) -> a.compareTo(b));
+
+
+
+
+
+
+
+
+The Basics of Java Generics
+List<Integer> list = new LinkedList<>();
+
+3. Generic Methods
+Note that Oracle recommendation is to use an uppercase letter to represent a generic type and to choose a more descriptive letter to represent formal types. In Java Collections, we use T for type, K for key and V for value.
+
+
+The <T> in the method signature, This is needed even if the method is returning void.
+generic method to convert an array to a list:
+public <T> List<T> fromArrayToList(T[] a) {   
+    return Arrays.stream(a).collect(Collectors.toList());
+}
